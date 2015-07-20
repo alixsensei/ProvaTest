@@ -30,7 +30,7 @@ public class Prova2 {
                     ")";
              stm = dbconn.prepareStatement(sql2);
              DataFormat dt = new SimpleDataFormat("yyyy-MM-dd");
-             Date data = dt.valueOf("2001-02-17");
+             Date data = dt.valueOf("2001-02-17");  
              
              // imposto i parametri
              stm.setString(1,"alix");
