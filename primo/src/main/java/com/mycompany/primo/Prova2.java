@@ -18,6 +18,7 @@ public class Prova2 {
         try {           
                Class.forName("com.mysql.jdbc.Driver");
             // apertura della connessione
+            // prova di git
             
             String jdbcDriver = "com.mysql.jdbc.Driver";
             String DB_URL = "jdbc:mysql://localhost/formazione";
