@@ -6,7 +6,6 @@
 package com.mycompany.primo;
 import java.sql.*;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,37 +23,36 @@ public class prova {
             // apertura della connessione
             
             String jdbcDriver = "com.mysql.jdbc.Driver";
-            String DB_URL = "jdbc:mysql://localhost/formazione";
+            String DB_URL = "jdbc:mysql://localhost/formazione?zeroDateTimeBehavior=convertToNull&autoReconnect=true&characterEncoding=UTF-8&characterSetResults=UTF-8";
              dbconn = DriverManager.getConnection(DB_URL, username, password);
              System.out.println("Connected!!!");
              stm = dbconn.createStatement();
-             String sql;
-             //sql = "select * from dipendente";
-             //ResultSet rs = stm.executeQuery(sql);
-             //rs.last();
-             //System.out.println("Numero delle righe: " + rs.getRow());
-             sql = "select nome from dipendente where cognome = ndembi";
-             ResultSet rs;
-             int indice;
-             Date data;
-            rs = stm.executeQuery(sql);
-      
-       while(rs.next()){
-         
-         //indice = rs.getInt("id");
-         String nome = rs.getString("nome");
-         //String cognome  = rs.getString("cognome");
-        // data  = rs.getDate("data_di_nascita");
-         //String codfisc = rs.getString("codice_fiscale");
-         //Display values
-         //System.out.println("Il codice id è: "+ indice);
-         System.out.println("Il nome è "+ nome);
-         //System.out.println("Il cognome è "+ cognome);
-         //System.out.println("Il codice fiscale è "+ codfisc);
-        // System.out.println("la sua data di nascita è: " + data);
-        }
+            
+            ResultSet rs;
+             
        
-       // proviamo a popolare il nostro db
+            String sql2 = "SELECT * FROM dipendente";
+            rs = stm.executeQuery(sql2);
+
+            System.out.println("Ecco il contenuto della notra Database:");
+            System.out.println("=======================================");
+            while(rs.next()){
+               //Retrieve by column name
+               int id  = rs.getInt("id");
+               String nome = rs.getString("nome");
+               String cognome = rs.getString("cognome");
+               String data = rs.getString("data_di_nascita");
+               String codefisc = rs.getString("codice_fiscale");
+
+               //Display values
+               System.out.print("ID: " + id);
+               System.out.print(", Nome: " + nome);
+               System.out.print(", Cognome: " + cognome);
+               System.out.print(", Data di nascita: " + data);
+               System.out.println(", Codice fiscale: " + codefisc);
+               System.out.println();
+            }
+
         if (stm != null) {
                 stm.close();
         }
@@ -62,9 +60,7 @@ public class prova {
                 rs.close();
         }
                     
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(prova.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(prova.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (dbconn != null) {

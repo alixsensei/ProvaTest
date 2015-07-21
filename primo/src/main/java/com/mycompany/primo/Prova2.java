@@ -1,15 +1,17 @@
 package com.mycompany.primo;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.sql.Date;
-
+import java.util.Date;
 
 public class Prova2 {
 
-    public static void main(String[] args) throws SQLException, ParseException {
+    public static void main(String[] args) throws SQLException, ParseException, IOException {
         Connection dbconn = null;
         PreparedStatement stm = null;
         
@@ -22,35 +24,67 @@ public class Prova2 {
             
             String jdbcDriver = "com.mysql.jdbc.Driver";
             String DB_URL = "jdbc:mysql://localhost/formazione";
-             dbconn = DriverManager.getConnection(DB_URL, username, password);
-             System.out.println("Connected!!!");
-             String sql2 = "INSERT INTO dipendente ( " +
-                     " Nome, Cognome, codfisc " +
-                     ") VALUES ( " +
-                     " ?, ?, ?"+
-                    ")";
-             stm = dbconn.prepareStatement(sql2);
-             DataFormat dt = new SimpleDataFormat("yyyy-MM-dd");
-             Date data = dt.valueOf("2001-02-17");  
+            dbconn = DriverManager.getConnection(DB_URL, username, password);
+            System.out.println("Connected!!!");
+            String sql2 = "INSERT INTO dipendente VALUES ( " +
+                   " ?, ?, ?, ?, ?)";
              
-             // imposto i parametri
-             stm.setString(1,"alix");
-             stm.setString(2,"ndembi");
-             stm.setDate(3, data);
-             stm.setString(4,"FHFGHTGRF");
              
-             /*
-             stm.setString(6, "robert");
-             stm.setString(7, "Pires");
-             stm.setString(8, "2013-10-11");
-             stm.setString(9, "FHFRDVRF");
-             */
+            stm = dbconn.prepareStatement(sql2);
              
-            stm.executeUpdate();
+             //
+             
+               
+             // Interagisco con l'utente
+            BufferedReader buff = new BufferedReader(new InputStreamReader(System.in));
+             // Inserimento dei dati nel buffer
+            
+             System.out.print("Inserisci il giorno di nascita: ");
+            int day = Integer.parseInt(buff.readLine());
+            System.out.print("Inserisci il mese di nascita: ");
+            int month = Integer.parseInt(buff.readLine());
+            System.out.print("Inserisci l'anno di nascita: ");
+            int year = Integer.parseInt(buff.readLine());
+
+            String date = year + "-" + month + "-" + day;
+            java.util.Date utilDate = null;
+
+            try {
+              SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+              utilDate = formatter.parse(date);
+              System.out.println("utilDate:" + utilDate);
+            } catch (ParseException e) {
+              System.out.println(e.toString());
+              e.printStackTrace();
+            }
+             
+              java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+  
+            
+            // Inserimento dei dati nel buffer
+            
+            System.out.print("codice ID: ");
+            int id = Integer.parseInt(buff.readLine());
+            System.out.print("Nome: ");
+            String nome = buff.readLine();
+            System.out.print("Cognome: ");
+            String cognome = buff.readLine();
+            System.out.print("Codice Fiscale: ");
+            String codfisc = buff.readLine();  
+             
+             stm.setInt(1,id);
+             stm.setString(2,nome);
+             stm.setString(3,cognome);
+             stm.setDate(4, sqlDate);
+             stm.setString(5,codfisc);
+             
+          /*   String query =  "UPDATE dipendente " +
+                   "SET data_di_nascita = 1980-12-23 WHERE id = 1";
+             stm = dbconn.prepareStatement(query); */
+         //   stm.setDate(1, sqlDate);
+              stm.executeUpdate();
                     
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(prova.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(prova.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (dbconn != null) {

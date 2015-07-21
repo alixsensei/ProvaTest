@@ -1,14 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.mycompany.primo;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.*;
-import javax.xml.crypto.Data;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 
 public class Update {
@@ -24,19 +21,25 @@ public class Update {
      
      // metodo che aggiunge un nuovo record nel database
      
-     private static boolean agginuge(String nome, String cognome, Date data, String codfisc) {
+     private static boolean aggiunge(int id, String nome, String cognome, Date data, String codfisc) {
          //Riferimento alla connessione
          Connection connection = null;
+         
+         
          
          try {
              connection = DriverManager.getConnection(DB_URL, username, password);
              stm = connection.createStatement();
+             // set auto-commit to false
+            connection.setAutoCommit(false);
              stm.executeUpdate( "INSERT INTO dipendente ( " +
-                     "nome, cognome, data_di_nascita, Codice fiscale " +
-                     ") VALUES   (               " +
-                     "' " + nome + ", " + cognome + ", " + data + " ," + codfisc + ")"
+                     "id, nome, cognome, data_di_nascita, codice_fiscale" +
+                                " VALUES   (               " +
+                     + id + ", " + nome + ", " + cognome + ", " + data + " ," + codfisc + ")"
              
              );
+             // explicit commit statements to apply changes
+            connection.commit();
              return true;
              
          } catch (SQLException ex) {
@@ -65,17 +68,43 @@ public class Update {
              // Interagisco con l'utente
              BufferedReader buff = new BufferedReader(new InputStreamReader(System.in));
              
+             // Inserimento dei dati nel buffer
+            System.out.print("Inserisci il codice ID: ");
+            int id = Integer.parseInt(buff.readLine());
+             
+             // Inserimento dei dati nel buffer
+            System.out.print("Inserisci il giorno di nascita: ");
+            int day = Integer.parseInt(buff.readLine());
+            System.out.print("Inserisci il mese di nascita: ");
+            int month = Integer.parseInt(buff.readLine());
+            System.out.print("Inserisci l'anno di nascita: ");
+            int year = Integer.parseInt(buff.readLine());
+
+
+            String date = year + "-" + month + "-" + day;
+            java.util.Date utilDate = null;
+
+            try {
+              SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+              utilDate = formatter.parse(date);
+              System.out.println("utilDate:" + utilDate);
+            } catch (ParseException e) {
+              System.out.println(e.toString());
+            }
+             
+            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+             
             // Inserimento dei dati nel buffer
             System.out.print("Nome: ");
             String nome = buff.readLine();
             System.out.print("Cognome: ");
             String cognome = buff.readLine();
-            System.out.print("Data di nascita: ");
-            String data = buff.readLine();
+            //System.out.print("Data di nascita: ");
+            //String data = buff.readLine();
             System.out.print("Codice fiscale: ");
             String codfisc = buff.readLine();  
             
-            agginuge(nome, cognome, data, codfisc);
+            aggiunge(id, nome, cognome, sqlDate, codfisc);
             
            
              
@@ -85,8 +114,8 @@ public class Update {
         
     }
 
-    private static void agginuge(String nome, String cognome, String data, String codfisc) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+  //  private static void agginuge(String nome, String cognome, String data, String codfisc) {
+    //    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    //}
         
 }
