@@ -35,11 +35,11 @@ public class prova {
                 
                 
                //Retrieve by column name
-               int id  = rs.getInt("id");
-               String nome = rs.getString("nome");
-               String cognome = rs.getString("cognome");
+               //int id  = rs.getInt("id");
+               //String nome = rs.getString("nome");
+               //String cognome = rs.getString("cognome");
                String data = rs.getString("data_di_nascita");
-               String codefisc = rs.getString("codice_fiscale");
+               //String codefisc = rs.getString("codice_fiscale");
                
                //int id = rs.getInt("id");
                //System.out.println(data);
@@ -50,11 +50,11 @@ public class prova {
                     String date_conv = rs_date_conv.getString(1);
             
                     //Display values
-                    System.out.print("ID: " + id);
-                    System.out.print(", Nome: " + nome);
-                    System.out.print(", Cognome: " + cognome);
+                    System.out.print("ID: " + rs.getInt("id"));
+                    System.out.print(", Nome: " + rs.getString("nome"));
+                    System.out.print(", Cognome: " + rs.getString("cognome"));
                     System.out.print(", Data di nascita: " + date_conv);
-                    System.out.println(", Codice fiscale: " + codefisc);
+                    System.out.println(", Codice fiscale: " + rs.getString("codice_fiscale"));
                     System.out.println();
                 }
             

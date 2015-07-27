@@ -5,21 +5,18 @@
  */
 package com.mycompany.primo;
 
-import javax.ejb.Stateless;
-
 /**
  *
  * @author Alix
  */
-@Stateless
-public class JavaBean {
-
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
+import java.sql.Date;
+public class FirstHibernate {
+    // ilirlazaj07
+    
     private int id;
     private String nome;
     private String cognome;
-    private String data;
+    private Date data = new Date(02,02,2012);
     private String codfisc;
 
     /**
@@ -67,14 +64,14 @@ public class JavaBean {
     /**
      * @return the data
      */
-    public String getData() {
+    public Date getData() {
         return data;
     }
 
     /**
      * @param data the data to set
      */
-    public void setData(String data) {
+    public void setData(Date data) {
         this.data = data;
     }
 
@@ -93,5 +90,4 @@ public class JavaBean {
     }
     
     
-
 }
